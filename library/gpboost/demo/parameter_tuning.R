@@ -9,9 +9,8 @@
 
 # ＜目次＞
 # 0 準備
-# 1 データ確認
+# 1 モデル設定
 # 2 クロスバリデーションを用いたチューニング
-# 2-0 共通パラメータ設定
 # 2-1 小規模のチューニング
 # 2-2 大規模のチューニング
 # 2-3 メトリックを変更してチューニング
@@ -54,16 +53,13 @@ dtrain <- gpb.Dataset(data = X, label = y)
 
 # 2 クロスバリデーションを用いたチューニング -------------------------------------------------
 
-# 2-0 共通パラメータ設定 -----------------------------------------------------
+# 2-1 小規模のチューニング -----------------------------------------------------
 
 # パラメータ設定
 params <-
   list(objective = "binary",
        verbose = 0,
        num_leaves = 2^10)
-
-
-# 2-1 小規模のチューニング -----------------------------------------------------
 
 # チューニンググリッド設定
 param_grid_small <-
@@ -91,8 +87,13 @@ opt_params %>% print()
 opt_params %>% glimpse()
 
 
-
 # 2-2 大規模のチューニング -----------------------------------------------------
+
+# パラメータ設定
+params <-
+  list(objective = "binary",
+       verbose = 0,
+       num_leaves = 2^10)
 
 # チューニンググリッド設定
 param_grid_large <-
@@ -121,11 +122,17 @@ opt_params %>% print()
 opt_params %>% glimpse()
 
 
-
 # 2-3 メトリックを変更してチューニング ---------------------------------------------
+
+# パラメータ設定
+params <-
+  list(objective = "binary",
+       verbose = 0,
+       num_leaves = 2^10)
 
 # チューニング
 # --- AUCで評価
+# --- チューニンググリッドは2-2と同様のものを使用
 set.seed(1)
 opt_params <-
   param_grid_large %>%
@@ -153,17 +160,10 @@ set.seed(1)
 test_ind <- sample.int(n, size = as.integer(0.5 * n))
 folds <- list(test_ind)
 
-# モデル定義
-# --- ランダム効果モデル
-# --- 追加パラメータの設定
-gp_model <- GPModel(group_data = group, likelihood = "bernoulli_probit")
-gp_model$set_optim_params(params=list("optimizer_cov" = "gradient_descent"))
-
-# データセットの定義
-dtrain <- gpb.Dataset(data = X, label = y)
-
 # パラメータ設定
-params <- list(objective = "binary", verbose = 0)
+params <-
+  list(objective = "binary",
+       verbose = 0)
 
 # チューニンググリッド設定
 param_grid <-
