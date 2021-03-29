@@ -16,8 +16,9 @@
 
 
 # ＜引数＞
-# - dataset: gpb.Datasetオブジェクト（訓練データ）
-# - data: matrix型又はdgCMatrix型(疎データ)
+# - dataset： gpb.Datasetオブジェクト（訓練データ）
+# - data   ： matrix型又はdgCMatrix型(疎データ)
+#  -info   ： gpb.Datasetオブジェクトの情報リスト
 
 
 # ＜目次＞
@@ -38,16 +39,14 @@ data(agaricus.test, package = "gpboost")
 
 # 1 データセットを作成 --------------------------------------------------------------
 
-# データセットの作成
-# --- 訓練データ
+# 訓練データの作成
 train <- agaricus.train
-dtrain <- gpb.Dataset(train$data, label = train$label)
+dtrain <- train$data %>% gpb.Dataset(label = train$label)
 
-# データセットの作成
-# --- テストデータ
+# 検証データの作成
+# --- 訓練データの設定に基づいて作成
 test <- agaricus.test
-dtest <- gpb.Dataset.create.valid(dtrain, test$data, label = test$label)
-
+dtest <-dtrain %>% gpb.Dataset.create.valid(test$data, label = test$label)
 
 # 確認
 dtest %>% print()

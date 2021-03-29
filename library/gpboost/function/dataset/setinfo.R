@@ -67,12 +67,17 @@ gpb.Dataset.construct(dtrain)
 
 # 2 データ情報の確認 ------------------------------------------------------------
 
-# ラベル設定
+# ラベル抽出
 labels <- dtrain %>% getinfo("label")
-setinfo(dtrain, "label", 1 - labels)
+labels %>% head(10)
 
+# ラベル設定の変更
+dtrain %>% setinfo( "label", 1 - labels)
+
+# ラベル抽出
+# --- 変更確認
 labels2 <- dtrain %>% getinfo("label")
+labels2 %>% head(10)
 
 # 比較
 all.equal(labels2, 1 - labels)
-

@@ -1,6 +1,6 @@
 # ***********************************************************************************************
 # Function  : gpb.plot.importance
-# Objective : 計算された特徴の重要度(ゲイン/カバー/頻度)を棒グラフとしてプロット
+# Objective : 計算された特徴の重要度を棒グラフとしてプロット
 # Created by: Owner
 # Created on: 2021/03/28
 # URL       : https://www.rdocumentation.org/packages/gpboost/versions/0.5.0/topics/gpb.plot.importance
@@ -14,6 +14,14 @@
 # ＜構文＞
 # gpb.plot.importance(tree_imp, top_n = 10L, measure = "Gain",
 #   left_margin = 10L, cex = NULL)
+
+
+# ＜引数＞
+# - tree_imp    ：gpb.importance()から出力されたdata.tableオブジェクト
+# - top_n       ：出力する上位N個の特徴量
+# - measure     ：出力項目を指定（Grain/Cover/Frequency）
+# - left_margin ：
+# - cex         ：
 
 
 # ＜目次＞
@@ -37,7 +45,7 @@ data(agaricus.train, package = "gpboost")
 
 # データ
 train <- agaricus.train
-dtrain <- gpb.Dataset(train$data, label = train$label)
+dtrain <- train$data %>% gpb.Dataset(label = train$label)
 
 
 # 2 モデル構築 -------------------------------------------------------------------

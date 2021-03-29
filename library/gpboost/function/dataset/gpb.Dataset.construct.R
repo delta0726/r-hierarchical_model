@@ -8,7 +8,8 @@
 
 
 # ＜概要＞
-# - 明示的にデータセットを作成
+# - データセットを明示的に構築
+# - 実行によりいくつかの設定が行われているようだ（中身不明）
 
 
 # ＜構文＞
@@ -38,7 +39,8 @@ data(agaricus.train, package = "gpboost")
 
 # データセットの作成
 train <- agaricus.train
-dtrain <- gpb.Dataset(train$data, label = train$label)
+dtrain <- train$data %>% gpb.Dataset(label = train$label)
 
 # 明示的にデータセットを作成
+# --- colnames / handle / version で入力値に変化あり
 gpb.Dataset.construct(dtrain)

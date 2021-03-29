@@ -41,10 +41,13 @@ Logit <- function(x) log(x / (1.0 - x))
 
 # 訓練データ
 train <- agaricus.train
-dtrain <- gpb.Dataset(train$data, label = train$label)
+dtrain <- train$data %>% gpb.Dataset(label = train$label)
 
 # 情報の設定
-setinfo(dtrain, "init_score", rep(Logit(mean(train$label)), length(train$label)))
+# --- init_score：初期スコアは、gpboostがブーストする基本予測
+dtrain %>%
+  setinfo(name = "init_score",
+          info = rep(Logit(mean(train$label)), length(train$label)))
 
 # 検証データ
 test <- agaricus.test
@@ -74,8 +77,8 @@ model <-
 tree_interpretation <- gpb.interprete(model, test$data, 1L:5L)
 
 # データ確認
-tree_interpretation %>% print()
 tree_interpretation %>% glimpse()
+tree_interpretation %>% print()
 
 
 

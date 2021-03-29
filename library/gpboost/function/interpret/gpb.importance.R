@@ -12,7 +12,16 @@
 
 
 # ＜構文＞
-# gpb.importance(model、percentage = TRUE)
+# gpb.importance(model, percentage = TRUE)
+
+
+# ＜引数＞
+# - percentage： パーセンテージで出力（デフォルト=TRUE）
+
+
+# ＜出力＞
+# - 特徴量ごとにGain/Cover/Frequencyが出力される
+# - data.tableオブジェクトで出力される
 
 
 # ＜目次＞
@@ -34,9 +43,16 @@ data(agaricus.train, package = "gpboost")
 
 # 1 データ確認 -------------------------------------------------------------------
 
-# データ
+# データ確認
 train <- agaricus.train
-dtrain <- gpb.Dataset(train$data, label = train$label)
+train %>% names()
+
+# データセット作成
+dtrain <- train$data %>% gpb.Dataset(label = train$label)
+
+# 確認
+dtrain %>% print()
+dtrain %>% names()
 
 
 # 2 モデル構築 -------------------------------------------------------------------
@@ -48,7 +64,6 @@ params <-
        max_depth = -1L,
        min_data_in_leaf = 1L,
        min_sum_hessian_in_leaf = 1.0)
-
 
 # モデル構築
 model <-

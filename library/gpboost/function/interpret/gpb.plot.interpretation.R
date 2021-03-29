@@ -1,6 +1,6 @@
 # ***********************************************************************************************
 # Function  : gpb.plot.interpretation
-# Objective : 計算された予測寄与度を棒グラフとしてプロットする
+# Objective : 予測寄与度(Breakdown)を棒グラフとしてプロットする
 # Created by: Owner
 # Created on: 2021/03/28
 # URL       : https://www.rdocumentation.org/packages/gpboost/versions/0.5.0/topics/gpb.plot.interpretation
@@ -8,12 +8,21 @@
 
 
 # ＜概要＞
-# - 計算された予測寄与度を棒グラフとしてプロットする
+# - 予測寄与度(Breakdown)を棒グラフとしてプロットする
+# - LIME分析
 
 
 # ＜構文＞
 # gpb.plot.interpretation(tree_interpretation_dt, top_n = 10L, cols = 1L,
 #   left_margin = 10L, cex = NULL)
+
+
+# ＜引数＞
+# - tree_interpretation_dt ：gpb.interprete()から出力されたdata.tableオブジェクト
+# - top_n                  ：出力する上位N個の特徴量
+# - measure                ：出力項目を指定（Grain/Cover/Frequency）
+# - left_margin            ：
+# - cex                    ：
 
 
 # ＜目次＞
@@ -40,11 +49,16 @@ Logit <- function(x) log(x / (1.0 - x))
 
 # 1 データ確認 -------------------------------------------------------------------
 
-# データ
+# データセット作成
 labels <- agaricus.train$label
 dtrain <- gpb.Dataset(agaricus.train$data, label = labels)
 
+
+# データ確認
+labels %>% mean() %>% Logit() %>% rep(length(labels))
+
 # 追加設定
+# --- init_scoreの設定
 setinfo(dtrain, "init_score", rep(Logit(mean(labels)), length(labels)))
 
 
@@ -74,6 +88,7 @@ tree_interpretation <-
                  idxset = 1L:5L)
 
 # 確認
+tree_interpretation %>% glimpse()
 tree_interpretation %>% print()
 tree_interpretation %>% class()
 

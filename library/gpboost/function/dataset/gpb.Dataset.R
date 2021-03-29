@@ -17,13 +17,13 @@
 
 
 # ＜引数＞
-# - matrix: matrix型又はdgCMatrix型(疎データ)
-# - params = list()
-# - reference = NULL
-# - colnames = NULL,
-# - categorical_feature = NULL
-# - free_raw_data = FALSE
-# - info = list()
+# - matrix              ：matrix型又はdgCMatrix型(疎データ)
+# - params              ：パラメータのリスト
+# - reference           ：
+# - colnames            ：
+# - categorical_feature ：
+# - free_raw_data       ：構築後に生データを解放する必要がある場合はTRUE
+# - info                ：
 
 
 # ＜目次＞

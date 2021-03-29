@@ -57,6 +57,7 @@
 #   --- デフォルトでは、すべてのメトリックが早期停止の対象と見なされます。
 # - 早期停止の最初のメトリックのみを考慮したい場合は、paramsでfirst_metric_only = TRUEを渡します
 
+
 # ＜目次＞
 # 0 準備
 # 1 関数実行
@@ -91,5 +92,6 @@ cvbst <- gpb.cv(params = params,
                 eval = "l2",
                 early_stopping_rounds = 5,
                 use_gp_model_for_validation = TRUE)
+
 print(paste0("Optimal number of iterations: ", cvbst$best_iter,
              ", best test error: ", cvbst$best_score))

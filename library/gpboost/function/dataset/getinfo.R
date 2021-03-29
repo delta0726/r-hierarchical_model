@@ -1,6 +1,6 @@
 # ***********************************************************************************************
 # Function  : getinfo
-# Objective : gpb.Datasetオブジェクトの情報を取得します
+# Objective : gpb.Datasetオブジェクトの要素を抽出する
 # Created by: Owner
 # Created on: 2021/03/28
 # URL       : https://www.rdocumentation.org/packages/gpboost/versions/0.5.0/topics/getinfo
@@ -8,7 +8,7 @@
 
 
 # ＜概要＞
-# - 調査中（サンプルでは意味不明）
+# - gpb.Datasetオブジェクトの要素を抽出する
 
 
 # ＜構文＞
@@ -21,10 +21,10 @@
 
 # ＜詳細＞
 # 取得する情報フィールドのnameは次のいずれか
-# - label: ラベルを指定
-# - weight: 重みの再スケールを実行
-# - group:
-# - init_score: 初期スコアは、gpboostがブーストする基本予測
+# - label     ：ラベルを指定
+# - weight    ：重みの再スケールを実行
+# - group     ：
+# - init_score：初期スコアは、gpboostがブーストする基本予測
 
 
 # ＜構文＞
@@ -55,7 +55,7 @@ agaricus.train %>% glimpse()
 
 # データセット作成
 train <- agaricus.train
-dtrain <- gpb.Dataset(train$data, label = train$label)
+dtrain <- train$data %>% gpb.Dataset(label = train$label)
 
 # 確認
 dtrain %>% print()
@@ -68,8 +68,16 @@ gpb.Dataset.construct(dtrain)
 # 2 データ情報の確認 ------------------------------------------------------------
 
 # ラベルの抽出
-labels <- getinfo(dtrain, "label")
-setinfo(dtrain, "label", 1 - labels)
+labels <- dtrain %>% getinfo("label")
+labels %>% head(10)
 
-labels2 <- getinfo(dtrain, "label")
+# ラベルを変更してセット
+dtrain %>% setinfo( "label", 1 - labels)
+
+# ラベル抽出
+# --- 変更を確認
+labels2 <- dtrain %>% getinfo("label")
+labels2 %>% head(10)
+
+# 関数でチェック
 all(labels2 == 1 - labels)
