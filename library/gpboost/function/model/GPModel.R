@@ -8,7 +8,7 @@
 
 
 # ＜概要＞
-# - ガウス過程またはグループ化された変量効果を持つ混合効果モデルを含むGPModelを作成する
+# - ガウス過程またはグループ化変量効果を持つ混合効果モデルを含むGPModelを作成する
 #   --- 両方を同時に適用することも可能
 
 
@@ -24,21 +24,28 @@
 
 
 # ＜引数＞
-# - group_data           ：グループ情報をベクトルで指定
-# - group_rand_coef_data ；グループ化されたランダム係数の共変量データ
+# - group_data                ：グループ情報（ベクトル/行列）
+# - group_rand_coef_data      ：グループ化されたランダム係数の共変量データ（ベクトル/行列）
 # - ind_effect_group_rand_coef：
-# - gp_coords            ：ガウス過程の座標(特徴)を持つ行列
-# - gp_rand_coef_data    ：ガウス過程のランダム係数の共変量データ
-# - cov_function         ：ガウス過程の共分散関数を指定する文字列
-# - cov_fct_shape        ：共分散関数の形状パラメーターを指定する数値
-# - vecchia_approx       ：TRUEの場合はVecchia近似が使用されます（デフォルトはFALSE）
-# - num_neighbors        ：Vecchia近似の近傍の数を指定する整数
-# - vecchia_ordering     ：Vecchia近似で使用される順序を指定する文字列
-# - vecchia_pred_type    ：予測に使用されるVecchia近似のタイプを指定する文字列
-# - num_neighbors_pred   ：予測を行うためのVecchia近似の近傍の数を指定する整数
-# - cluster_ids          ：変量効果/ガウス過程の独立した実現を示すID /ラベルを持つベクトル
-# - free_raw_data        ：TRUEの場合、データは初期化後にRで解放されます。
-# - likelihood           ：応答変数の尤度関数を指定する文字列（デフォルトは"gaussian"）
+# - gp_coords                 ：ガウス過程の特徴座標(行列)
+# - gp_rand_coef_data         ：ガウス過程のランダム係数の共変量データ（ベクトル/行列）
+# - cov_function              ：ガウス過程の共分散関数（文字列）
+# - cov_fct_shape             ：共分散関数の形状パラメーター（数値）
+# - vecchia_approx            ：TRUEの場合、Vecchia近似が使用されます(TRUE/FALSE)
+# - num_neighbors             ：Vecchia近似の近傍の数を指定する整数
+# - vecchia_ordering          ：Vecchia近似で使用される順序を指定（文字列）
+# - vecchia_pred_type         ：予測に使用されるVecchia近似のタイプ（文字列）
+# - num_neighbors_pred        ：予測を行うためのVecchia近似の近傍の数（整数）
+# - cluster_ids               ：変量効果/ガウス過程の独立した実現を示すID /ラベルを持つベクトル
+# - free_raw_data             ：TRUEの場合、データは初期化後にRで解放(TRUE/FALSE)
+# - likelihood                ：応答変数の尤度関数を指定する文字列（デフォルトは"gaussian"）
+
+
+# ＜ガウス過程の共分散関数：cov_function＞
+# - exponential         ：指数カーネル関数
+# - gaussian            ：ガウスカーネル
+# - matern              ：Matern相互共分散関数
+# - powered_exponential ：
 
 
 # ＜目次＞
@@ -83,6 +90,12 @@ gp_model <- GPModel(gp_coords = coords, cov_function = "exponential",
 
 # 3 ガウス過程モデルにランダム効果を結合 ------------------------------------------------
 
+# データ確認
+# --- グループ情報
+# --- 空間座標
+group_data[,1] %>% table()
+coords %>% head()
+
 # モデル定義
 gp_model <- GPModel(group_data = group_data, gp_coords = coords,
                     cov_function = "exponential", likelihood = "gaussian")
@@ -96,4 +109,3 @@ gp_model %>% glimpse()
 # オブジェクトの確認
 gp_model %>% names()
 gp_model %>% attributes()
-
