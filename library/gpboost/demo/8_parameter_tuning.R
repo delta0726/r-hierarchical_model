@@ -7,6 +7,12 @@
 # ***********************************************************************************************
 
 
+# ＜概要＞
+# - GPboostが提供するハイパーパラメータチューニング関数を確認する
+#   --- 最良パラメータのみが出力される
+#   --- グリッドごとのパフォーマンスが見たい場合は個別実行が必要な模様
+
+
 # ＜目次＞
 # 0 準備
 # 1 モデル設定
@@ -18,9 +24,6 @@
 
 
 # 0 準備 ---------------------------------------------------------------------------------
-
-# ワークスペースクリア
-rm(list = ls())
 
 # ライブラリ
 library(tidyverse)
@@ -35,20 +38,24 @@ source("library/gpboost/demo/func/generate_data_81.R")
 ls()
 
 # データ確認
-tibble(X, y, group) %>%
-  set_colnames(c("X1", "X2", "y", "group"))
+data.frame(X, y, group) %>%
+  set_colnames(c("X1", "X2", "y", "group")) %>%
+  as_tibble()
 
 
 # 1 モデル設定 -------------------------------------------------------------------------
 
 # モデル定義
 # --- ランダム効果モデル
-# --- 追加パラメータの設定
+# --- オプティマイザーのパラメータを追加で設定
 gp_model <- GPModel(group_data = group, likelihood = "bernoulli_probit")
-gp_model$set_optim_params(params=list("optimizer_cov" = "gradient_descent"))
+gp_model$set_optim_params(params = list("optimizer_cov" = "gradient_descent"))
 
 # データセットの定義
 dtrain <- gpb.Dataset(data = X, label = y)
+
+# 確認
+dtrain %>% print()
 
 
 # 2 クロスバリデーションを用いたチューニング -------------------------------------------------
@@ -69,6 +76,7 @@ param_grid_small <-
        max_bin = c(255, 1000))
 
 # チューニング
+# --- num_try_random = NULL
 set.seed(1)
 opt_params <-
   param_grid_small %>%
@@ -103,6 +111,7 @@ param_grid_large <-
        max_bin = c(255, 500, 1000, 2000))
 
 # チューニング
+# --- num_try_random = 10
 # --- loglossで評価
 set.seed(1)
 opt_params <-
