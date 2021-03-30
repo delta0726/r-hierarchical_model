@@ -22,25 +22,25 @@
 
 
 # ＜引数＞
-# - data                  ：学習データのgpb.Datasetオブジェクト
-# - label                 ：ラベルをベクトルで指定
-# - weight                ：ウエイトをベクトルで指定
-# - params                ：モデルのパラメータ（後述）
-# - nrounds               ：ブースティングの反復回数（=ツリーの数）
-# - gp_model              ：GPModelオブジェクト（ガウス過程および/またはグループ化された変量効果）
+# - data                        ：学習データのgpb.Datasetオブジェクト
+# - label                       ：ラベルをベクトルで指定
+# - weight                      ：ウエイトをベクトルで指定
+# - params                      ：モデルのパラメータ（後述）
+# - nrounds                     ：ブースティングの反復回数（=ツリーの数）
+# - gp_model                    ：GPModelオブジェクト（ガウス過程および/またはグループ化された変量効果）
 # - use_gp_model_for_validation ：TRUEの場合、検証データの予測を計算するためにガウス過程も使用（ツリーモデルに加えて）
 # - train_gp_model_cov_pars     ：TRUE,
-# - valids                ：検証データのgpb.Datasetオブジェクト
-# - obj                   ：目的関数を文字列orカスタムの目的関数で指定（後述）
-# - eval                  ：評価関数を文字列又は関数で指定（後述）
-# - verbose               ：0(非表示) / 1(表示)
-# - record                ：TRUEは、メッセージをbooster$record_evalsに記録します
-# - eval_freq             ：メッセージ出力頻度
-# - early_stopping_rounds ：早期停止をアクティブにする。 少なくとも1つの検証データと1つのメトリックが必要
-# - init_model            ：初期モデルの指定（gpb.Boosterオブジェクトの保存先）
-# - colnames              ：特徴量の列名（NULLの場合はデータセットのものを使用）
-# - categorical_feature   ：
-# - callbacks             ：各反復で適用されるコールバック関数のリスト
+# - valids                      ：検証データのgpb.Datasetオブジェクト
+# - obj                         ：目的関数を文字列orカスタムの目的関数で指定（後述）
+# - eval                        ：評価関数を文字列又は関数で指定（後述）
+# - verbose                     ：0(非表示) / 1(表示)
+# - record                      ：TRUEの場合、メッセージをbooster$record_evalsに記録
+# - eval_freq                   ：メッセージ出力頻度
+# - early_stopping_rounds       ：早期停止をアクティブにする。 少なくとも1つの検証データと1つのメトリックが必要
+# - init_model                  ：初期モデルの指定（gpb.Boosterオブジェクトの保存先）
+# - colnames                    ：特徴量の列名（NULLの場合はデータセットのものを使用）
+# - categorical_feature         ：
+# - callbacks                   ：各反復で適用されるコールバック関数のリスト
 
 
 # ＜パラメータ：params＞
@@ -235,3 +235,4 @@ pred$random_effect_mean
 pred$random_effect_cov
 pred$fixed_effect
 pred$random_effect_mean + pred$fixed_effect
+

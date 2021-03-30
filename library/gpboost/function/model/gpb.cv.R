@@ -46,7 +46,7 @@
 # - categorical_feature         ：
 # - Early_stopping_rounds       ：数値で指定、スコアが上昇してから停止までの回数
 # - callbacks                   ：各イテレーションで適用されるコールバック関数をリストで指定
-# - reset_data                  ：TRUEの場合、ブースターモデルが予測モデルに変換されメモリと元のデータセットが解放。
+# - reset_data                  ：TRUEの場合、ブースターモデルが予測モデルに変換されメモリと元のデータセットを解放
 # - delete_boosters_folds       ：TRUEの場合、foldごとののブースターが削除
 
 

@@ -8,7 +8,7 @@
 
 
 # ＜概要＞
-
+# - GPboostのトレーニングを行う関数
 
 
 # ＜構文＞
@@ -21,24 +21,24 @@
 
 
 # ＜引数＞
-# - params                      ：
-# - data                        ：
-# - nrounds                     ：
-# - gp_model                    ：
-# - use_gp_model_for_validation ：
-# - train_gp_model_cov_pars     ：
-# - valids                      ：
-# - obj                         ：
-# - eval                        ：
-# - verbose                     ：
-# - record                      ：
-# - eval_freq                   ：
-# - init_model                  ：
-# - colnames                    ：
+# - params                      ：lightgbmの学習パラメータ（gpboostを参照）
+# - data                        ：学習データのgpb.Datasetオブジェクト
+# - nrounds                     ：ブースティングの反復回数（=ツリーの数）
+# - gp_model                    ：GPModelオブジェクト（ガウス過程および/またはグループ化された変量効果）
+# - use_gp_model_for_validation ：TRUEの場合、検証データの予測を計算するためにガウス過程も使用（ツリーモデルに加えて）
+# - train_gp_model_cov_pars     ：TRUEの場合、ガウス過程の共分散パラメーターはすべてのブースティング反復で推定
+# - valids                      ：検証データのgpb.Datasetオブジェクト
+# - obj                         ：目的関数を文字列orカスタムの目的関数で指定（gpboostを参照）
+# - eval                        ：評価関数を文字列又は関数で指定（gpboostを参照）
+# - verbose                     ：0(非表示) / 1(表示)
+# - record                      ：TRUEの場合、メッセージをbooster$record_evalsに記録
+# - eval_freq                   ：メッセージ出力頻度
+# - init_model                  ：初期モデルの指定（gpb.Boosterオブジェクトの保存先）
+# - colnames                    ：特徴量の列名（NULLの場合はデータセットのものを使用）
 # - categorical_feature         ：
-# - early_stopping_rounds       ：
-# - callbacks                   ：
-# - reset_data                  ：
+# - early_stopping_rounds       ：数値で指定、スコアが上昇してから停止までの回数
+# - callbacks                   ：各イテレーションで適用されるコールバック関数をリストで指定
+# - reset_data                  ：TRUEの場合、ブースターモデルが予測モデルに変換されメモリと元のデータセットを解放
 
 
 

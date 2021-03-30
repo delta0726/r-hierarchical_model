@@ -1,6 +1,6 @@
 # ***********************************************************************************************
 # Function  : gpb.get.eval.result
-# Objective :
+# Objective : gpb.Boosterオブジェクトから要素を抽出する
 # Created by: Owner
 # Created on: 2021/03/28
 # URL       : https://www.rdocumentation.org/packages/gpboost/versions/0.5.0/topics/gpb.get.eval.result
@@ -8,26 +8,26 @@
 
 
 # ＜概要＞
-# -
+# - gpb.Boosterオブジェクトから要素を抽出する
 
 
 # ＜構文＞
-# gpb.get.eval.result(booster, data_name, eval_name, iters = NULL,
-#   is_err = FALSE)
+# gpb.get.eval.result(booster, data_name, eval_name, iters = NULL, is_err = FALSE)
 
 
 # ＜引数＞
-# - booster
-# - data_name
-# - eval_name
-# - iters = NULL,
-# - is_err = FALSE
+# - booster     ：gpb.Boosterオブジェクト
+# - data_name   ：データカテゴリの名前(names()で出力される項目)
+# - eval_name   ：出力項目の名前
+# - iters       ：評価結果を取得する反復の整数ベクトル（NULLの場合、すべての反復の評価結果）
+# - is_err      ：TRUEは、代わりに評価エラーを返す
 
 
 # ＜目次＞
 # 0 準備
 # 1 モデル構築
 # 2 データ抽出
+# 3 gpb.Boosterの中身
 
 
 # 0 準備 -------------------------------------------------------------------------
@@ -35,6 +35,7 @@
 # ライブラリ
 library(tidyverse)
 library(gpboost)
+library(Hmisc)
 
 # データロード
 data(agaricus.train, package = "gpboost")
@@ -65,12 +66,33 @@ model <-
 
 # 2 データ抽出 ------------------------------------------------------------------------
 
-# Examine valid data_name values
-model$record_evals %>% names() %>% setdiff("start_iter")
+# データ確認
+model %>% glimpse()
+model %>% names()
 
-# Examine valid eval_name values for dataset "test"
+# 抽出データの名前を確認
+model$record_evals %>% names()
 model$record_evals[["test"]] %>% names()
 
-# Get L2 values for "test" dataset
+# データ抽出
 model %>%
   gpb.get.eval.result( "test", "l2")
+
+# リストツリーで確認
+model$record_evals %>% list.tree(5)
+
+
+# 3 gpb.Boosterの中身 -------------------------------------------------------------------------
+
+# クラス確認
+model %>% class()
+
+# 要素確認
+# --- save以降はメソッド
+model %>% names()
+
+# 出力確認
+model$raw
+model$record_evals
+model$params
+model$best_score
