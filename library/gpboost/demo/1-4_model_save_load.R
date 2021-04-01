@@ -1,10 +1,14 @@
 # ***********************************************************************************************
-# Title     : Save and load Booster
+# Title     : モデル(ブースター)の保存/ロード
 # Objective : TODO
 # Created by: Owner
 # Created on: 2021/03/26
 # URL       : https://github.com/fabsig/GPBoost/blob/master/R-package/demo/GPBoost_algorithm.R
 # ***********************************************************************************************
+
+
+# ＜概要＞
+# - gpb.BoosterオブジェクトをJSON形式で保存/ロードする
 
 
 # ＜目次＞

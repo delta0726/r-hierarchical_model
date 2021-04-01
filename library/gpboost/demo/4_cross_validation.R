@@ -17,9 +17,6 @@
 
 # 0 準備 ---------------------------------------------------------------------------------
 
-# ワークスペースクリア
-rm(list = ls())
-
 # ライブラリ
 library(tidyverse)
 library(magrittr)
@@ -36,10 +33,18 @@ ls()
 data %>% class()
 data %>% names()
 
+
 # データ確認
 data.frame(data$X, data$y) %>%
   set_colnames(c("X1", "X2", "y")) %>%
   as_tibble()
+
+# パラメータ
+n %>% print()
+
+# 関数
+f1d
+sim_data
 
 
 
@@ -89,14 +94,24 @@ bst$best_iter
 
 # 2 カスタム損失関数を用いたクロスバリデーション ---------------------------------------------
 
+# データオブジェクト作成
+dtrain <- gpb.Dataset(data$X[1:n,], label = data$y[1:n])
+
+# パラメータ設定
+params <-
+  list(learning_rate = 0.1,
+       max_depth = 6,
+       min_data_in_leaf = 5,
+       objective = "regression_l2")
+
 # 関数定義
 # --- カスタム損失関数
 quantile_loss <- function(preds, dtrain) {
   alpha <- 0.95
   labels <- getinfo(dtrain, "label")
-  y_diff <- as.numeric(labels-preds)
+  y_diff <- as.numeric(labels - preds)
   dummy <- ifelse(y_diff<0,1,0)
-  quantloss <- mean((alpha-dummy)*y_diff)
+  quantloss <- mean((alpha - dummy) * y_diff)
   return(list(name = "quant_loss", value = quantloss, higher_better = FALSE))
 }
 
@@ -122,7 +137,7 @@ source("library/gpboost/demo/func/generate_data_22.R")
 # --- ランダム効果モデル
 gp_model <- GPModel(group_data = group)
 
-# データオブジェクト
+# データオブジェクト作成
 dtrain <- gpb.Dataset(X, label = y)
 
 # ハイパーパラメータ
@@ -134,13 +149,15 @@ params <-
        leaves_newton_update = FALSE)
 
 # クロスバリデーション
-bst <- gpb.cv(params = params,
-              data = dtrain,
-              gp_model = gp_model,
-              nrounds = 100,
-              nfold = 10,
-              eval = "l2",
-              early_stopping_rounds = 5)
+# --- use_gp_model_for_validation = FALSE
+bst <-
+  gpb.cv(params = params,
+         data = dtrain,
+         gp_model = gp_model,
+         nrounds = 100,
+         nfold = 10,
+         eval = "l2",
+         early_stopping_rounds = 5)
 
 # 最適イテレーション
 bst$best_iter
@@ -148,20 +165,32 @@ bst$best_iter
 
 # 4 ツリーブースティングとランダム効果モデルの融合-2 ---------------------------------------------
 
+# データ準備
+source("library/gpboost/demo/func/generate_data_22.R")
+
 # モデル定義
 # --- ランダム効果モデル
 gp_model <- GPModel(group_data = group)
 
+# ハイパーパラメータ
+params <-
+  list(learning_rate = 0.05,
+       max_depth = 6,
+       min_data_in_leaf = 5,
+       objective = "regression_l2",
+       leaves_newton_update = FALSE)
+
 # クロスバリデーション
-# --- use_gp_model_for_validation
-bst <- gpb.cv(params = params,
-              data = dtrain,
-              gp_model = gp_model,
-              use_gp_model_for_validation = TRUE,
-              nrounds = 100,
-              nfold = 10,
-              eval = "l2",
-              early_stopping_rounds = 5)
+# --- use_gp_model_for_validation = TRUE（デフォルト）
+bst <-
+  gpb.cv(params = params,
+         data = dtrain,
+         gp_model = gp_model,
+         use_gp_model_for_validation = TRUE,
+         nrounds = 100,
+         nfold = 10,
+         eval = "l2",
+         early_stopping_rounds = 5)
 
 # 最適イテレーション
 bst$best_iter
