@@ -7,6 +7,10 @@
 # ***********************************************************************************************
 
 
+# ＜概要＞
+# -
+
+
 # ＜目次＞
 # 0 準備
 # 1 ツリーブースティングでクロスバリデーション
@@ -24,7 +28,7 @@ library(gpboost)
 
 
 # データ準備
-source("library/gpboost/demo/func/generate_data_21.R")
+source("library/gpboost/demo/func/data_cross_validation.R")
 
 # 変数確認
 ls()
@@ -50,10 +54,13 @@ sim_data
 
 # 1 ツリーブースティングでクロスバリデーション ---------------------------------------
 
-# ******** eval = "l2" ********
+# ＜参考＞
+# Metric Parameters
+# https://lightgbm.readthedocs.io/en/latest/Parameters.html#metric
+
 
 # データオブジェクト作成
-dtrain <- gpb.Dataset(data$X[1:n,], label = data$y[1:n])
+dtrain <- data$X[1:n,] %>% gpb.Dataset(label = data$y[1:n])
 
 # パラメータ設定
 params <-
@@ -61,6 +68,9 @@ params <-
        max_depth = 6,
        min_data_in_leaf = 5,
        objective = "regression_l2")
+
+
+# ******** eval = "l2" ********
 
 # クロスバリデーション
 # --- eval = "l2"
@@ -72,8 +82,14 @@ bst <-
          eval = "l2",
          early_stopping_rounds = 5)
 
+# イテレーション
+bst$record_evals$valid$l2$eval
+
 # 最適イテレーション
 bst$best_iter
+
+# 最良スコア
+bst$best_score
 
 
 # ******** eval = "l1" ********
@@ -90,6 +106,9 @@ bst <-
 
 # 最適イテレーション
 bst$best_iter
+
+# 最良スコア
+bst$best_score
 
 
 # 2 カスタム損失関数を用いたクロスバリデーション ---------------------------------------------
@@ -127,6 +146,9 @@ bst <- gpb.cv(params = params,
 # 最適イテレーション
 bst$best_iter
 
+# 最良スコア
+bst$best_score
+
 
 # 3 ツリーブースティングとランダム効果モデルの融合-1 ---------------------------------------------
 
@@ -162,6 +184,9 @@ bst <-
 # 最適イテレーション
 bst$best_iter
 
+# 最良スコア
+bst$best_score
+
 
 # 4 ツリーブースティングとランダム効果モデルの融合-2 ---------------------------------------------
 
@@ -194,3 +219,6 @@ bst <-
 
 # 最適イテレーション
 bst$best_iter
+
+# 最良スコア
+bst$best_score

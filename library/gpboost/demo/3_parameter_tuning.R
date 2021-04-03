@@ -32,21 +32,27 @@ library(gpboost)
 
 
 # データ準備
-source("library/gpboost/demo/func/generate_data_81.R")
+source("library/gpboost/demo/func/data_parameter_tuning.R")
 
 # 変数確認
 ls()
 
 # データ確認
+# --- 分類問題
 data.frame(X, y, group) %>%
   set_colnames(c("X1", "X2", "y", "group")) %>%
   as_tibble()
+
+# データ確認
+y %>% table()
+group %>% table()
 
 
 # 1 モデル設定 -------------------------------------------------------------------------
 
 # モデル定義
 # --- ランダム効果モデル
+# --- bernoulli_probitはバイナリ分類の際のデフォルト値
 # --- オプティマイザーのパラメータを追加で設定
 gp_model <- GPModel(group_data = group, likelihood = "bernoulli_probit")
 gp_model$set_optim_params(params = list("optimizer_cov" = "gradient_descent"))

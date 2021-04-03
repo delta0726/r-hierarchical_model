@@ -32,7 +32,7 @@ library(gpboost)
 
 
 # データ準備
-source("library/gpboost/demo/func/generate_data_11.R")
+source("library/gpboost/demo/func/data_boosting.R")
 
 # 変数確認
 ls()
@@ -222,8 +222,8 @@ Xtest_plot <- x %>% cbind(rep(0, length(x)))
 pred_plot <- predict(bst, data = Xtest_plot)
 
 # プロット作成
-plot(x,f1d(x),type="l",ylim = c(-0.25,3.25), col = "red", lwd = 2,
+plot(x, f1d(x), type = "l",ylim = c(-0.25, 3.25), col = "red", lwd = 2,
      main = "Comparison of true and fitted value")
-lines(x,pred_plot, col = "blue", lwd = 2)
+lines(x, pred_plot, col = "blue", lwd = 2)
 legend("bottomright", legend = c("truth", "fitted"),
        lwd=2, col = c("red", "blue"), bty = "n")
